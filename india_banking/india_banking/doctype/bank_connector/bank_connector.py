@@ -94,6 +94,11 @@ class BankConnector(Document):
 		bank_account = frappe.get_doc(
 			"Bank Account", payment_order.company_bank_account
 		)
+		# IFSC is optional on Bank Account, so enforce it before anything reaches the bank.
+		if not bank_account.branch_code:
+			frappe.throw(
+				_("IFSC Code is missing on Bank Account {0}").format(bank_account.name)
+			)
 		self.backfill_party_name(payment_order)
 		payment_payload = frappe._dict()
 		payment_payload.doc = payment_order.as_dict(convert_dates_to_str=True)

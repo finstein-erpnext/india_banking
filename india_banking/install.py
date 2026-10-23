@@ -234,14 +234,6 @@ properties = {
 			"property_type": "Data",
 			"value": "IFSC Code",
 		},
-		{
-			"doctype_or_field": "DocField",
-			"doctype": "Bank Account",
-			"fieldname": "branch_code",
-			"property": "reqd",
-			"property_type": "Data",
-			"value": 1,
-		},
 	],
 	"Payment Order": [
 		{
@@ -562,7 +554,6 @@ def create_bank_account_custom_fields():
 			{
 				"label": "Mobile Number",
 				"fieldname": "mobile_number",
-				"mandatory_depends_on": "is_company_account",
 				"fieldtype": "Data",
 				"insert_after": "iban",
 			},
@@ -572,7 +563,6 @@ def create_bank_account_custom_fields():
 				"fieldtype": "Data",
 				"options": "Email",
 				"insert_after": "mobile_number",
-				"reqd": 1,
 			},
 			{
 				"label": "Bank Balance",
@@ -596,7 +586,6 @@ def create_bank_account_custom_fields():
 				"fieldtype": "Link",
 				"options": "Currency",
 				"insert_after": "email",
-				"reqd": 1,
 			},
 		]
 	}

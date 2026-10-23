@@ -13,11 +13,18 @@ def validate(doc, method=None):
 
 
 def validate_ifsc_code(doc):
+	# Foreign and card accounts have no IFSC; payment flows require it where used.
+	if not doc.branch_code:
+		return
+
 	if not IFSC_PATTERN.match(cstr(doc.branch_code)):
 		frappe.throw(_("IFSC/Branch Code is not valid"))
 
 
 def update_party_transaction_currency(doc):
+	if doc.currency:
+		return
+
 	if doc.party_type and doc.party:
 		currency_field = (
 			"salary_currency" if doc.party_type == "Employee" else "default_currency"

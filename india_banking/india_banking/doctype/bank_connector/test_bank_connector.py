@@ -230,3 +230,19 @@ class TestBackfillPartyName(FrappeTestCase):
 		]
 		self.assertEqual(get_all_spy.call_count, len(supplier_calls))
 		self.assertEqual(len(supplier_calls), 1)
+
+
+class TestPayloadRequiresIFSC(FrappeTestCase):
+	"""IFSC is optional on Bank Account, so get_payload must refuse a company account without one."""
+
+	def test_get_payload_rejects_company_account_without_ifsc(self):
+		bank_connector = frappe.new_doc("Bank Connector")
+		bank_account = frappe._dict(name="No IFSC Account", branch_code=None)
+		with patch(
+			"india_banking.india_banking.doctype.bank_connector.bank_connector.frappe.get_doc",
+			return_value=bank_account,
+		):
+			with self.assertRaises(frappe.ValidationError):
+				bank_connector.get_payload(
+					frappe._dict(company_bank_account="No IFSC Account")
+				)
